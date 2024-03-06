@@ -1,4 +1,3 @@
----
 name: Rust Code Validation
 
 on:
@@ -17,7 +16,7 @@ jobs:
         with:
           override: true
           toolchain: stable
-      - run: cargo check
+      - name: Cache dependencies
         uses: actions/cache@v4
         with:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
@@ -27,5 +26,7 @@ jobs:
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             target/
+      - name: Check
+        run: cargo check
       - name: Build
         run: cargo build
