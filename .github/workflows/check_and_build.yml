@@ -1,0 +1,31 @@
+---
+name: Rust Code Validation
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  check_and_build:
+    name: Check and Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          override: true
+          toolchain: stable
+      - run: cargo check
+        uses: actions/cache@v4
+        with:
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+      - name: Build
+        run: cargo build
